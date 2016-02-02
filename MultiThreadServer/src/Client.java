@@ -9,13 +9,20 @@ public class Client {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		String name = args[0];
-		Socket socket = new Socket("localhost", 4444);
-		PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-		BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
-		while(true){
-			String readerInput = bufferReader.readLine();
-			printWriter.println(name+" : "+readerInput);
+		if(args.length == 1){
+			String name = args[0];
+			Socket socket = new Socket("localhost", 4444);
+			BufferedReader bufferReaderFromClient =  new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+			printWriter.println(name);
+			BufferedReader bufferReaderFromCommandPromt = new BufferedReader(new InputStreamReader(System.in));
+			while(true){
+				String readerInput = bufferReaderFromCommandPromt.readLine();
+				printWriter.println(name+" : "+readerInput);
+				System.out.println(bufferReaderFromClient.readLine());
+			}
+		}else{
+			System.out.println("Use Client Name <name>");
 		}
 	}
 
