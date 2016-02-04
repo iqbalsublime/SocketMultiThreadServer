@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 public class Client {
 	
@@ -23,14 +24,14 @@ public class Client {
 			
 			while(true){
 				String readerInput = bufferReaderFromCommandPromt.readLine();
-				Message message = new Message(readerInput);
+				Message message = new Message("22","11","00",readerInput);
 				objectOutputStream.writeObject(message);
 				Message returnMessage = (Message) objectInputStream.readObject();
 				processMessage(returnMessage);
 				
 			}
 		}else{
-			System.out.println("Use Client Name <name>");
+			System.out.println("Enter Client Name <name>");
 		}
 	}
 	
@@ -38,7 +39,13 @@ public class Client {
 		String password = new Passwordgenerator().generateRandomPassword();
 		String hash = new HashGenerator().generateHash(password);
 		
-		System.out.println("Password is: "+message.getText());
+		Random r = new Random();
+		int Low = 10;
+		int High = 100;
+		int Result = r.nextInt(High-Low) + Low;
+		
+		System.out.println("Server Password is: "+message.getText());
+		System.out.println("My Password is: "+password);
 		
 		if(message.getText().equalsIgnoreCase("try again letter.....")){
 			System.out.println("Your Limit execeeded");

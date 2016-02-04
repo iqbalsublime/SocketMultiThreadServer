@@ -18,15 +18,18 @@ public class ServerThread extends Thread {
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 			while((message = (Message) objectInputStream.readObject())!=null){
-				System.out.println(i);
-				if(i > 2){
-					objectOutputStream.writeObject(new Message("try again letter....."));
-					continue;
+				
+				if(message.getName().equalsIgnoreCase("00")){
+					System.out.println(i);
+					if(i > 2){
+						objectOutputStream.writeObject(new Message("","","","try again letter....."));
+						continue;
+					}
+					//message.setRange("00000-10000");
+					//message.setHash(hashGenerator.generateHash(passwordgenerator.generateRandomPassword()));
+				System.out.println(message.getHash());
+				objectOutputStream.writeObject(prepareMessage(message));
 				}
-				//message.setRange("00000-10000");
-				//message.setHash(hashGenerator.generateHash(passwordgenerator.generateRandomPassword()));
-			System.out.println(message.getHash());
-			objectOutputStream.writeObject(prepareMessage(message));
 			
 			i++;
 			}

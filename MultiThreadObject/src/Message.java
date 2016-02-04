@@ -6,19 +6,28 @@ public class Message implements Serializable {
 	String hash;
 	String range;
 	String text;
+	String name;
 	
 	public Message(){
 		
 	}
-	public Message(String text) {
+	public Message(String name) {
+		this.name = name;
+	}
+	
+	public Message(String hash, String range, String name, String text) {
+		this.hash = hash;
+		this.range = range;
+		this.name = name;
 		this.text = text;
 	}
 	
-	public Message(String hash, String range) {
-		this.hash = hash;
-		this.range = range;
+	public String getName() {
+		return name;
 	}
-	
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getText() {
 		return text;
 	}
