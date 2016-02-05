@@ -16,5 +16,13 @@ public class Passwordgenerator{
         return new String(password);
     }
     
+    public synchronized String generatePasswordWithinRange(int high, int low) {
+    	Random r = new Random();
+		//int Low = 10;
+		//int High = 100;
+		int result = r.nextInt(high-low) + low;
+		return Integer.toString(result);
+    }
+    
    
 }

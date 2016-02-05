@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Random;
 
 public class Client {
 	
@@ -36,20 +35,33 @@ public class Client {
 	}
 	
 	public static void processMessage(Message message){
-		String password = new Passwordgenerator().generateRandomPassword();
-		String hash = new HashGenerator().generateHash(password);
-		
-		Random r = new Random();
-		int Low = 10;
-		int High = 100;
-		int Result = r.nextInt(High-Low) + Low;
-		
-		System.out.println("Server Password is: "+message.getText());
-		System.out.println("My Password is: "+password);
 		
 		if(message.getText().equalsIgnoreCase("try again letter.....")){
-			System.out.println("Your Limit execeeded");
+			System.out.println("Your Limit exceeded");
 		}else{
+			String totalRange = message.getRange();
+			String ranges [] = totalRange.split("-");
+			String pass1 = ranges[0];
+			String pass2 = ranges[1];
+			String password = new Passwordgenerator().generatePasswordWithinRange(Integer.parseInt(pass2), Integer.parseInt(pass1));
+			if(password.length()==4){
+				password = "0"+password;
+			}
+			else if(password.length()==3){
+				password = "00"+password;
+			}
+			else if(password.length()==2){
+				password = "000"+password;
+			}
+			else if(password.length()==1){
+				password = "0000"+password;
+			}
+			
+			String hash = new HashGenerator().generateHash(password);
+			
+			System.out.println("Server Password is: "+message.getText());
+			System.out.println("My Password is: "+password);
+			
 			System.out.println("Password range is: "+message.getRange());
 			System.out.println(message.getHash());
 			
@@ -67,5 +79,7 @@ public class Client {
 		
 		
 	}
+	
+	
 
 }

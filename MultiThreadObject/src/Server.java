@@ -13,7 +13,7 @@ public class Server {
 	@SuppressWarnings("resource")
 	public void runServer() throws IOException{
 		ServerSocket serverSocket = new ServerSocket(PORT);
-		System.out.println("Server up and Ready for connection.....");
+		System.out.println("Server up and Ready for connection.....On Port "+PORT);
 		while(true){
 			Socket socket = serverSocket.accept();
 			new ServerThread(socket).start();
