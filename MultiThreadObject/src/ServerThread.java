@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ServerThread extends Thread {
 	Socket socket;
@@ -29,6 +31,9 @@ public class ServerThread extends Thread {
 					//message.setHash(hashGenerator.generateHash(passwordgenerator.generateRandomPassword()));
 				System.out.println(message.getHash());
 				objectOutputStream.writeObject(prepareMessage(message));
+				}else if(message.getName().equalsIgnoreCase("1111")){
+					System.out.println("Password got by Client is "+message.getText());
+					i = 10;
 				}
 			
 			i++;
@@ -126,7 +131,10 @@ public class ServerThread extends Thread {
 			range = "95001-99999";
 			message.setRange(range);
 		}
-		message.setHash(hashGenerator.generateHash(password));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+		String date = sdf.format(new Date()); 
+	//	System.out.println(date); //04/02/2016
+		message.setHash(hashGenerator.generateHash(password+date));
 		message.setText(password);
 		return message;
 	}

@@ -5,11 +5,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Client {
 	
 	Passwordgenerator passwordgenerator = new Passwordgenerator();
 	HashGenerator hashGenerator = new HashGenerator();
+	
+	public Client(){
+		
+	}
 	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
@@ -26,7 +32,7 @@ public class Client {
 				Message message = new Message("22","11","00",readerInput);
 				objectOutputStream.writeObject(message);
 				Message returnMessage = (Message) objectInputStream.readObject();
-				processMessage(returnMessage);
+				processMessage(returnMessage, objectOutputStream);
 				
 			}
 		}else{
@@ -34,7 +40,7 @@ public class Client {
 		}
 	}
 	
-	public static void processMessage(Message message){
+	public static void processMessage(Message message, ObjectOutputStream objectOutputStream) throws IOException{
 		
 		if(message.getText().equalsIgnoreCase("try again letter.....")){
 			System.out.println("Your Limit exceeded");
@@ -56,8 +62,10 @@ public class Client {
 			else if(password.length()==1){
 				password = "0000"+password;
 			}
-			
-			String hash = new HashGenerator().generateHash(password);
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+			String date = sdf.format(new Date()); 
+			//System.out.println(date); //04/02/2016
+			String hash = new HashGenerator().generateHash(password+date);
 			
 			System.out.println("Server Password is: "+message.getText());
 			System.out.println("My Password is: "+password);
@@ -69,11 +77,20 @@ public class Client {
 				System.out.println("Password matched");
 				System.out.println("Server Hash: "+message.getHash());
 				System.out.println("Client Hash: "+hash);
+				
+				//
+				Message message1 = new Message("22","11","1111",password);
+				System.out.println("Sending password to Server....."+password);
+				objectOutputStream.writeObject(message1);
+		
 			}
 			else{
 				System.out.println("Password doesn't matched");
 				System.out.println("Server Hash: "+message.getHash());
 				System.out.println("Client Hash: "+hash);
+				
+				
+				
 			}
 		}
 		
